@@ -73,11 +73,20 @@ app.get('/users/:id', (req, res) => {
 
 // 개별 사용자 등록
 app.post('/users', (req, res) => {
-  userDB.set(id++, req.body);
+  let userName = req.body.name;
+  console.log(userName);
   // 사용자 등록
-  res.json({
-    message: `${userDB.get(id-1).name}님, 사용자 등록이 완료되었습니다.`
-  });
+  if(userName) {
+    userDB.set(id++, req.body);
+    res.status(201).json({
+      // 위에서 지정한 이름이 아닌, 실제 객체 안에 들어가는 key인 name이 들어가야 한다. (userName X , name O)
+      message: `${userDB.get(id-1).name}님, 사용자 등록이 완료되었습니다.`
+    });
+  } else {
+    res.status(400).json({
+      error: '요청 값을 모두 입력해주세요.'
+    })
+  }
 });
 
 // 전체 사용자 삭제
