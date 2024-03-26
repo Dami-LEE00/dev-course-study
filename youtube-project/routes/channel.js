@@ -15,30 +15,48 @@ router
     let channels = []
     let channels_id = []
 
-    if(channelDB.size) {
-      channelDB.forEach((value) => {
-        channels.push(value)
-      })
-      // channels 배열에 값이 들어있으면 정상 반환 / 없으면 오류 반환
-      if(channels.length) {
-        // req.body에 userId가 따로 지정되어있는 경우, 해당 userId가 생성한 채널만 반환
-        if(userId) {
-          channelDB.forEach((value) => {
-            if(value.userId === userId) {
-              channels_id.push(value)
-            }
-          })
-          res.status(200).json(channels_id)
-        // userId를 따로 요청하지 않은 경우, 모든 채널 반환
-        } else {
-          res.status(200).json(channels)
-        }
-      } else {
-        notFoundChannel(res)
-      }
-    } else {
-      notFoundChannel(res)
+    if (!channelDB.size) {
+      return notFoundChannel(res);
     }
+    
+    channelDB.forEach((value) => {
+      // userId가 요청되었을 때 해당 userId의 채널만 반환
+      if (userId && value.userId === userId) {
+        channels_id.push(value);
+      } else {
+        channels.push(value);
+      }
+    });
+    
+    // channels_id가 존재하면 해당 채널 반환, 없으면 모든 채널 반환
+    const resultChannels = channels_id.length ? channels_id : channels;
+    
+    res.status(200).json(resultChannels);
+
+    // if(channelDB.size) {
+    //   channelDB.forEach((value) => {
+    //     channels.push(value)
+    //   })
+    //   // channels 배열에 값이 들어있으면 정상 반환 / 없으면 오류 반환
+    //   if(channels.length) {
+    //     // req.body에 userId가 따로 지정되어있는 경우, 해당 userId가 생성한 채널만 반환
+    //     if(userId) {
+    //       channelDB.forEach((value) => {
+    //         if(value.userId === userId) {
+    //           channels_id.push(value)
+    //         }
+    //       })
+    //       res.status(200).json(channels_id)
+    //     // userId를 따로 요청하지 않은 경우, 모든 채널 반환
+    //     } else {
+    //       res.status(200).json(channels)
+    //     }
+    //   } else {
+    //     notFoundChannel(res)
+    //   }
+    // } else {
+    //   notFoundChannel(res)
+    // }
   })
   // 채널 개별 생성
   .post((req, res) => {
