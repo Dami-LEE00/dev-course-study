@@ -31,7 +31,7 @@ router
   .post((req, res) => {
     const { name, userId } = req.body
 
-    if(name && userId) {
+    if(typeof name === 'string' && Number.isInteger(userId)) {
       let sql = `INSERT INTO channels (name, user_id) VALUES (?, ?)`
       let values = [name, userId]
       conn.query(sql, values,
