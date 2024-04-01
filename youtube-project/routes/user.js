@@ -73,20 +73,14 @@ router
   })
   // 회원정보 개별 삭제
   .delete((req, res) => {
-    let { email } = req.body
+    const { email } = req.body
 
-    let sql = `DELETE * FROM users WHERE email = ?`
-      conn.query(sql, email,
-        function (err, results) {
-          if(results) {
-            res.status(200).json({
-              message: `${results.name}님, 다음에 또 뵙겠습니다.`
-            })
-          } else {
-            notFoundUser(res)
-          }
-        }
-      )
+    let sql = `DELETE FROM users WHERE email = ?`
+    conn.query(sql, email,
+      function (err, results) {
+        results.affectedRows ? res.status(200).json(results) : notFoundUser(res)
+      }
+    )
   })
 
 const notFoundUser = (res) => {
