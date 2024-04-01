@@ -4,8 +4,6 @@ const conn = require('../mariadb')
 
 router.use(express.json())
 
-const userDB = new Map()
-
 // 로그인
 router.post('/login', (req, res) => {
   const { email, password } = req.body
@@ -15,7 +13,7 @@ router.post('/login', (req, res) => {
     function (err, results) {
       let loginUser = results[0] // 첫 번째 사용자 정보만 가져옴
 
-      if (results.length > 0) {
+      if (results.length) {
         if (loginUser.password === password) {
           res.status(200).json({
             message: `${loginUser.name}님, 로그인에 성공하였습니다.`
@@ -34,18 +32,22 @@ router.post('/login', (req, res) => {
 
 // 회원가입
 router.post('/join', (req, res) => {
-  const { userId, password, name } = req.body
-  if(userId && password && name) {
-    userDB.set(userId, req.body)
-    res.status(201).json({
-      message: `${name}님 환영합니다.`
-    });
+  if(req.body) {
+    const { email, password, name, contact } = req.body
+
+    let sql = `INSERT INTO users (email, name, password, contact) VALUES (?, ?, ?, ?)`
+    let values = [email, name, password, contact]
+    conn.query(sql, values,
+      function (err, results) {
+        res.status(201).json(results)
+      }
+    )
   } else {
     res.status(400).json({
-      error: 'id, password, name을 모두 입력해주세요.'
-    });
+      error: 'email, password, name, phone 항목을 모두 입력해주세요.'
+    })
   }
-});
+})
 
 router
   .route('/users')
@@ -68,21 +70,23 @@ router
         }
       )
     }
-  
   })
-  // 회워 정보 개별 삭제
+  // 회원정보 개별 삭제
   .delete((req, res) => {
-    let { userId } = req.body
-  
-    const user = userDB.get(userId)
-    if(user) {
-      userDB.delete(userId)
-      res.status(200).json({
-        message: `${user.name}님, 다음에 또 뵙겠습니다.`
-      })
-    } else {
-      notFoundUser(res)
-    }
+    let { email } = req.body
+
+    let sql = `DELETE * FROM users WHERE email = ?`
+      conn.query(sql, email,
+        function (err, results) {
+          if(results) {
+            res.status(200).json({
+              message: `${results.name}님, 다음에 또 뵙겠습니다.`
+            })
+          } else {
+            notFoundUser(res)
+          }
+        }
+      )
   })
 
 const notFoundUser = (res) => {
