@@ -8,26 +8,29 @@ const userDB = new Map()
 
 // 로그인
 router.post('/login', (req, res) => {
-  // userId가 DB에 저장된 회원인지 확인
-  const { userId, password } = req.body
-  userDB.forEach((user, id) => {
-    if(user.userId === userId) {
-      if(user.password === password) {
-        res.json({
-          message: `${userId}님, 로그인에 성공하셨습니다.`
-        })
+  const { email, password } = req.body
+
+  let sql = `SELECT * FROM users WHERE email = ?`
+  conn.query(sql, email,
+    function (err, results) {
+      let loginUser = results[0] // 첫 번째 사용자 정보만 가져옴
+
+      if (results.length > 0) {
+        if (loginUser.password === password) {
+          res.status(200).json({
+            message: `${loginUser.name}님, 로그인에 성공하였습니다.`
+          })
+        } else {
+          res.status(401).json({
+            error: '비밀번호가 틀렸습니다. 다시 시도해주세요.'
+          })
+        }
       } else {
-        res.status(401).json({
-          error: '비밀번호가 틀렸습니다. 다시 시도해주세요.'
-        })
+        notFoundUser(res)
       }
-    } else {
-      res.status(401).json({
-        error: '존재하지 않는 id입니다. 회원가입 먼저 진행해주세요.'
-      })
     }
-  })
-});
+  )
+})
 
 // 회원가입
 router.post('/join', (req, res) => {
@@ -46,30 +49,24 @@ router.post('/join', (req, res) => {
 
 router
   .route('/users')
-  // 회원 정보 전체 & 개별 조회
+  // 회원정보 전체 & 개별 조회
   .get((req, res) => {
-    let { userId } = req.body
-    // req.body가 비어있을 경우 전체 조회
-    if(!userId) {
-      let users = []
-      userDB.forEach((value) => {
-        users.push({
-          userId: value.userId,
-          name: value.name
-        })
-      })
-      res.status(200).json(users)
-      // req.body에 userId가 있는 경우 해당 회원 개별 조회
+    const { email } = req.body
+
+    if(!email) {
+      let sql = `SELECT * FROM users`
+      conn.query(sql,
+        function (err, results) {
+          results.length ? res.status(200).json(results) : notFoundUser(res)
+        }
+      )
     } else {
-      const user = userDB.get(userId)
-      if(user) {
-        res.status(200).json({
-          userId: user.userId,
-          name: user.name
-        })
-      } else {
-        notFoundUser(res)
-      }
+      let sql = `SELECT * FROM users WHERE email = ?`
+      conn.query(sql, email,
+        function (err, results) {
+          results.length ? res.status(200).json(results) : notFoundUser(res)
+        }
+      )
     }
   
   })
