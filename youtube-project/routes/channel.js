@@ -86,36 +86,49 @@ router
       )
   })
   // 채널 개별 수정
-  .put((req, res) => {
-    let { id } = req.params
-    id = parseInt(id)
+  .put(
+    [
+      param('id').notEmpty().isInt().withMessage('채널 id가 필요합니다.'),
+      body('name').notEmpty().isString().withMessage('채널명을 형식에 맞게 입력해주세요.')
+    ],
+    (req, res) => {
+      validate(req, res)
 
-    let channel = channelDB.get(id)
-    let oldTitle = channel.channelTitle
+      let { id } = req.params
+      id = parseInt(id)
+      let { name } = req.body
 
-    if(channel) {
-      let newTitle = req.body.channelTitle
-      channel.channelTitle = newTitle
-      
-      channelDB.set(id, channel)
-      res.json({
-        message: `채널명이 ${oldTitle}에서 ${newTitle}로 변경되었습니다.`
-      })
-    } else {
-      notFoundChannel(res)
-    }
+      let sql = `UPDATE channels SET name = ? WHERE id = ?`
+      let values = [name, id]
+      conn.query(sql, values,
+        function (err, results) {
+          if(err) {
+            return res.status(400).end
+          }
+          
+          results.affectedRows ? res.status(200).json(results) : res.status(400).end()
+        }
+      )
   })
   // 채널 개별 삭제
-  .delete((req, res) => {
-    let { id } = req.params
-    id = parseInt(id)
+  .delete(
+    param('id').notEmpty().isInt().withMessage('채널 id가 필요합니다.'),
+    (req, res) => {
+      validate(req, res)
 
-    let sql = `DELETE FROM channels WHERE id = ?`
-    conn.query(sql, id,
-      function (err, results) {
-        results.affectedRows ? res.status(200).json(results) : notFoundChannel(res)
-      }
-    )
+      let { id } = req.params
+      id = parseInt(id)
+
+      let sql = `DELETE FROM channels WHERE id = ?`
+      conn.query(sql, id,
+        function (err, results) {
+          if(err) {
+            return res.status(400).end
+          }
+
+          results.affectedRows ? res.status(200).json(results) : res.status(400).end()
+        }
+      )
   })
 
 const notFoundChannel = (res) => {
