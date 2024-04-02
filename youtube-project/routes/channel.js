@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router();
 const conn = require('../mariadb')
+const { body, param, validationResult } = require('express-validator')
 
 router.use(express.json()) 
 
