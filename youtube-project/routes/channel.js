@@ -6,6 +6,14 @@ const { body, param, validationResult } = require('express-validator')
 
 router.use(express.json()) 
 
+const validate = (req, res) => {
+  const err = validationResult(req)
+
+  if(!err.isEmpty()) {
+    return res.status(400).json(err.array())
+  }
+}
+
 router
   .route('/')
   // 채널 전체 & 각 사용자마다 조회
@@ -29,40 +37,53 @@ router
     }
   })
   // 채널 개별 생성
-  .post((req, res) => {
-    const { name, userId } = req.body
+  .post(
+    [
+      body('name').notEmpty().isString().withMessage('채널명은 문자열로 입력해주세요.'),
+      body('userId').notEmpty().isInt().withMessage('채널id는 숫자로 입력해주세요.')
+    ],
+    (req, res) => {
+      validate(req, res)
 
-    if(typeof name === 'string' && Number.isInteger(userId)) {
+      const { name, userId } = req.body
+
       let sql = `INSERT INTO channels (name, user_id) VALUES (?, ?)`
       let values = [name, userId]
       conn.query(sql, values,
         function (err, results) {
-          res.status(201).json(results)
-          res.status(201).json({
-            message: `${userId}님, ${name} 채널 개설을 환영합니다!`
-          })
+          if(err) {
+            return res.status(400).end()
+          } else {
+            res.status(201).json(results)
+            res.status(201).json({
+              message: `${userId}님, ${name} 채널 개설을 환영합니다!`
+            })
+          }
         }
       )
-    } else {
-      res.status(400).json({
-        error: '요청 값을 제대로 보내주세요.'
-      })
-    }
   })
 
 router
   .route('/:id')
   // 채널 개별 조회
-  .get((req, res) => {
-    let { id } = req.params
-    id = parseInt(id)
+  .get(
+    param('id').notEmpty().isInt().withMessage('채널 id가 필요합니다.'),
+    (req, res) => {
+      validate(req, res)
 
-    let sql = `SELECT * FROM channels WHERE id = ?`
-    conn.query(sql, id,
-      function (err, results) {
-        results.length ? res.status(200).json(results) : notFoundChannel(res)
-      }
-    )
+      let { id } = req.params
+      id = parseInt(id)
+
+      let sql = `SELECT * FROM channels WHERE id = ?`
+      conn.query(sql, id,
+        function (err, results) {
+          if(err) {
+            return res.status(400).end
+          }
+          
+          results.length ? res.status(200).json(results) : notFoundChannel(res)
+        }
+      )
   })
   // 채널 개별 수정
   .put((req, res) => {
