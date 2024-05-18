@@ -17,7 +17,12 @@ const validate = (req, res) => {
 router
   .route('/')
   // 채널 전체 & 각 사용자마다 조회
-  .get((req, res) => {
+  .get(
+    [
+      body('userId').notEmpty().isInt().withMessage('채널id는 숫자로 입력해주세요.'),
+      validate
+    ],
+    (req, res) => {
     const { userId } = req.body
 
     if(!userId) {
