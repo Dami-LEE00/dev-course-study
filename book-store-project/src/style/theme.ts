@@ -6,24 +6,24 @@ export type ButtonSchema = 'primary' | 'normal';
 export type LayoutWidth = 'large' | 'medium' | 'small';
 
 interface Theme {
-  name: string;
+  name: ThemeName;
   color: Record<ColorKey, string>;
   heading: {
     [key in HeadingSize]: {
       fontSize: string;
-    };
+    }
   };
   button: {
     [key in ButtonSize]: {
       fontSize: string;
       padding: string;
-    };
+    }
   };
   buttonSchema: {
     [key in ButtonSchema]: {
       color: string;
       backgroundColor: string;
-    };
+    }
   };
   borderRadius: {
     default: string;
@@ -38,17 +38,23 @@ interface Theme {
 export const light: Theme = {
   name: 'light',
   color: {
-    primary: 'brown',
+    primary: '#ff5800',
     background: 'lightgray',
-    secondary: 'blue',
+    secondary: '#5f5f5f',
     third: 'green',
     border: 'gray',
-    text: 'black',
+    text: 'black'
   },
   heading: {
-    large: { fontSize: '2rem '},
-    medium: { fontSize: '1.5rem' },
-    small: { fontSize: '1rem' }
+    large: {
+      fontSize: '2rem'
+    },
+    medium: {
+      fontSize: '1.5rem'
+    },
+    small: {
+      fontSize: '1rem'
+    }
   },
   button: {
     large: {
@@ -82,9 +88,9 @@ export const light: Theme = {
       large: '1020px',
       medium: '760px',
       small: '320px'
-    },
-  },
-}
+    }
+  }
+};
 
 export const dark: Theme = {
   ...light,
@@ -95,17 +101,17 @@ export const dark: Theme = {
     secondary: 'darkblue',
     third: 'darkgreen',
     border: 'gray',
-    text: 'white',
-  }
-}
+    text: 'white'
+  },
+};
 
 export const getTheme = (themeName: ThemeName): Theme => {
-  switch (themeName) {
+  switch(themeName) {
     case 'light':
       return light;
     case 'dark':
       return dark;
     default:
-      return light;
+      throw new Error('Invalid theme name');
   }
 }

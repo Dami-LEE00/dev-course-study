@@ -1,11 +1,12 @@
 import React from 'react';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
-import ThemeSwitcher from './components/header/ThemeSwitcher';
 import { BookStoreThemeProvider } from './context/themeContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Error from './components/common/Error';
 import Signup from './pages/Signup';
+import ResetPassword from './pages/ResetPassword';
+import Login from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -33,19 +34,27 @@ const router = createBrowserRouter([
     path: '/login',
     element: (
       <Layout>
-        <p>Login page</p>
+        <Login />
       </Layout>
     ),
   },
   {
-    path: '/join',
+    path: '/signup',
     element: (
       <Layout>
         <Signup />
       </Layout>
     ),
   },
-])
+  {
+    path: '/reset',
+    element: (
+      <Layout>
+        <ResetPassword />
+      </Layout>
+    ),
+  },
+]);
 
 function App() {
   return (
