@@ -1,16 +1,23 @@
 import React, { ForwardedRef } from 'react';
 import styled from 'styled-components';
 
-interface Props {
-  placeholder: string;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  placeholder?: string;
+  inputType?: 'text' | 'email' | 'password' | 'number';
 }
 
 const InputText = React.forwardRef((
-  { placeholder }: Props,
+  { placeholder, inputType, onChange, ...props }: Props,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
   return (
-    <InputTextWrapper placeholder={placeholder} />
+    <InputTextWrapper
+      type={inputType}
+      placeholder={placeholder}
+      ref={ref}
+      onChange={onChange}
+      {...props}
+    />
   )
 });
 
