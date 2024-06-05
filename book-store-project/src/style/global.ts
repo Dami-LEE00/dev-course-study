@@ -24,10 +24,6 @@ export const GlobalStyle = createGlobalStyle<Props>`
     list-style: none;
   }
 
-  a {
-    text-decoration: none;
-  }
-
   h1 {
     margin: 0;
   }
