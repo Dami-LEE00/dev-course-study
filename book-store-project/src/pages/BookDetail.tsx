@@ -7,6 +7,9 @@ import Title from '../components/common/Title';
 import { BookDetail as IBookDetail } from '../models/book.model';
 import { formatDate, formatNumber } from '../utils/format';
 import { Link } from 'react-router-dom';
+import EllipsisBox from '../components/common/EllipsisBox';
+import LikeButton from '../components/book/LikeButton';
+import AddToCart from '../components/book/AddToCart';
 
 const bookInfoList = [
   {
@@ -46,7 +49,7 @@ const bookInfoList = [
 
 const BookDetail = () => {
   const { bookId } = useParams();
-  const { book } = useBook(bookId);
+  const { book, likeToggle } = useBook(bookId);
 
   console.log(book);
   if(!book) return null;
@@ -75,12 +78,22 @@ const BookDetail = () => {
             </dl>
           ))}
           <p className="summary">{book.summary}</p>
-          <div className="like">라이크</div>
-          <div className="add-cart">장바구니 넣기</div>
+
+          <div className="like">
+            <LikeButton book={book} onClick={likeToggle} />
+          </div>
+
+          <div className="add-cart">
+            <AddToCart book={book}/>
+          </div>
         </div>
       </header>
       <div className="content">
+        <Title size='medium'>상세 설명</Title>
+        <EllipsisBox linelimit={4}>{book.detail}</EllipsisBox>
 
+        <Title size='medium'>목차</Title>
+        <p className='index'>{book.contents}</p>
       </div>
     </BookDetailWrapper>
   )
@@ -119,6 +132,16 @@ const BookDetailWrapper = styled.div`
         }
       }
     }
+  }
+
+  .content {
+    /* .detail {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    } */
   }
 `;
 
