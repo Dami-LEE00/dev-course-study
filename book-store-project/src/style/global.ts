@@ -8,8 +8,8 @@ interface Props {
 
 export const GlobalStyle = createGlobalStyle<Props>`
   * { 
-    margin: 0;
-    padding: 0;
+    /* margin: 0;
+    padding: 0; */
     box-sizing: border-box;
     color: ${(props) => props.themeName === 'light' ? 'black' : 'white'};
   }
@@ -20,7 +20,7 @@ export const GlobalStyle = createGlobalStyle<Props>`
     background-color: ${(props) => props.themeName === 'light' ? 'white' : 'black'};
   }
 
-  ul, li {
+  ol ul, li {
     list-style: none;
   }
 
