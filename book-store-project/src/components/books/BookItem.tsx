@@ -15,7 +15,7 @@ interface Props {
 const BookItem = ({ book, view }: Props) => {
   return (
     <BookItemWrapper view={view}>
-      <Link to={`/books/${book.id}`}>
+      <Link to={`/book/${book.id}`}>
         <div className="img">
           <img
             src={getImgSrc(book.img)}
