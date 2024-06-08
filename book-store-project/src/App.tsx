@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Books from './pages/Books';
 import BookDetail from './pages/BookDetail';
 import Cart from './pages/Cart';
+import Order from './pages/Order';
 
 const router = createBrowserRouter([
   {
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/book/:bookId',
+    path: '/books/:bookId',
     element: (
       <Layout>
         <BookDetail />
@@ -66,10 +67,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/cart',
+    path: '/carts',
     element: (
       <Layout>
         <Cart />
+      </Layout>
+    ),
+  },
+  {
+    path: '/orders',
+    element: (
+      <Layout>
+        <Order />
       </Layout>
     ),
   },
