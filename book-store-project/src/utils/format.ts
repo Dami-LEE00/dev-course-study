@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 
 export const formatNumber = (number: number) => {
+  if (number == null) {
+    return '0'; // 혹은 다른 기본값을 반환
+  }
   return number.toLocaleString();
 };
 

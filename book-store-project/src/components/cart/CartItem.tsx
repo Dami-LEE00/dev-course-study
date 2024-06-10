@@ -70,16 +70,16 @@ const CartItemWrapper = styled.div`
     display: flex;
     align-items: start;
     flex: 1;
-  }
 
-  .check {
-    width: 40px;
-    flex-shrink: 0;
-  }
-
-  p {
-    padding: 0 0 8px 0;
-    margin: 0;
+    .check {
+      width: 40px;
+      flex-shrink: 0;
+    }
+    
+    p {
+      padding: 0 0 8px 0;
+      margin: 0;
+    }
   }
 `;
 

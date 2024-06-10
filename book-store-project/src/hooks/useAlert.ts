@@ -11,5 +11,5 @@ export const useAlert = () => {
     }
   }, []);
 
-  return {showAlert, showConfirm};
+  return { showAlert, showConfirm };
 };

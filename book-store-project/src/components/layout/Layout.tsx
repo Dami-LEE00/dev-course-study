@@ -9,19 +9,19 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <LayoutStyle>
+    <>
       <Header />
-      <main>{children}</main>
+      <LayoutStyle>{children}</LayoutStyle>
       <Footer />
-    </LayoutStyle>
+    </>
   )
 }
 
 const LayoutStyle = styled.main`
   margin: 0 auto;
+  padding: 20px 0;
   width: 100%;
   max-width: ${({ theme }) => theme.layout.width.large};
-  padding: 20px 0;
 `;
 
 export default Layout;
