@@ -1,14 +1,17 @@
-import React from 'react';
-import Title from '../components/common/Title';
-import Button from '../components/common/Button';
-import InputText from '../components/common/InputText';
+import Title from '@/components/common/Title';
+import styled from 'styled-components';
 
 const Home = () => {
   return (
-    <div>
-      <div>Home Compo</div>
-    </div>
+    <HomeStyle>
+      <Title size='large' color='primary'>
+        Home
+      </Title>
+    </HomeStyle>
   )
-}
+};
+
+const HomeStyle = styled.div``;
+
 
 export default Home;

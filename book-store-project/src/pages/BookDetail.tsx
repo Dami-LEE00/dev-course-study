@@ -49,11 +49,9 @@ const bookInfoList = [
 
 const BookDetail = () => {
   const { bookId } = useParams();
-  const { book, likeToggle } = useBook(bookId);
+  const { book, likeToggle, reviews } = useBook(bookId);
 
-  console.log(book);
   if(!book) return null;
-  console.log(book.title);
 
   return (
     <BookDetailWrapper>
