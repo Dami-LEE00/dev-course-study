@@ -1,4 +1,3 @@
-// 240415_E조_이다미
 // const conn = require('../mariadb');
 const jwt = require('jsonwebtoken');
 const mariadb = require('mysql2/promise');

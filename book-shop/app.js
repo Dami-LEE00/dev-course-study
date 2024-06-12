@@ -3,13 +3,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-// const corsOptions = {
-//   origin: 'http://localhost:3000' || "*",
-//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   optionsSuccessStatus: 204,
-// };
-
 const corsOptions = {
   origin: 'http://localhost:3000',
   credentials: true,

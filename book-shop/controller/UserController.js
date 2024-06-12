@@ -1,4 +1,3 @@
-// 240410_E조_이다미
 const conn = require('../mariadb');
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');

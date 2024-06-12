@@ -1,4 +1,3 @@
-// 240411_E조_이다미
 const express = require('express');
 const router = express.Router();
 const allCategory = require('../controller/CategoryController');
