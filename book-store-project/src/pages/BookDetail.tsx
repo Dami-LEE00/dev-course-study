@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useBook } from '../hooks/useBook';
@@ -12,7 +12,7 @@ import LikeButton from '../components/book/LikeButton';
 import AddToCart from '../components/book/AddToCart';
 import BookReview from '@/components/book/BookReview';
 import { Tabs, Tab } from '@/components/common/Tabs';
-import { title } from '../../../react-task-app/src/components/EditModal/EditModal.css';
+import Modal from '@/components/common/Modal';
 
 const bookInfoList = [
   {
@@ -54,14 +54,25 @@ const BookDetail = () => {
   const { bookId } = useParams();
   const { book, likeToggle, reviews, addReview } = useBook(bookId);
 
+  const [isImgOpen, setIsImgOpen] = useState(false);
+
   if(!book) return null;
 
   return (
     <BookDetailWrapper>
       <header className="header">
-        <div className="img">
+        <div
+          className="img"
+          onClick={() => setIsImgOpen(true)}
+        >
           <img src={getImgSrc(book.img)} alt={book.title} />
         </div>
+        <Modal 
+          isOpen={isImgOpen} 
+          onClose={() => setIsImgOpen(false)}
+        >
+          <img src={getImgSrc(book.img)} alt={book.title} />
+        </Modal>
         <div className="info">
           <Title size='large' color='text'>
             {book.title}
@@ -115,6 +126,10 @@ const BookDetailWrapper = styled.div`
     align-items: start;
     gap: 24px;
     padding: 0 0 24px 0;
+
+    > div {
+      position: relative !important;
+    }
 
     .img {
       flex: 1;

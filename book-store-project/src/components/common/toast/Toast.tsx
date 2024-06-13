@@ -1,31 +1,34 @@
 import useToastStore, { ToastItem } from '@/store/toastStore';
 import styled from 'styled-components';
 import { FaPlus, FaBan, FaInfoCircle } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useTimeout } from '@/hooks/useTimeout';
 
 export const TOAST_REMOVE_DELAY = 3000; // 3초
 
 const Toast = ({ id, message, type }: ToastItem) => {
   const removeToast = useToastStore((state) => state.removeToast);
-  const [isFadingOut, setFadingOut] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   const handleRemoveToast = () => {
-    setFadingOut(true);
+    setIsFadingOut(true);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      // 삭제
-      removeToast(id);
-    }, TOAST_REMOVE_DELAY);
+  useTimeout(() => {
+    setIsFadingOut(true);
+  }, TOAST_REMOVE_DELAY);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
+  const handleAnimationEnd = () => {
+    if (isFadingOut) {
+      removeToast(id);
+    }
+  };
   
   return (
-    <ToastWrapper className={isFadingOut ? 'fade-out' : 'fade-in'}>
+    <ToastWrapper 
+      className={isFadingOut ? 'fade-out' : 'fade-in'}
+      onAnimationEnd={handleAnimationEnd}
+    >
       {type === 'info' && <FaInfoCircle />}
       {type === 'error' && <FaBan />}
       <p>{message}</p>
@@ -38,7 +41,7 @@ const Toast = ({ id, message, type }: ToastItem) => {
 
 const ToastWrapper = styled.div`
   @keyframes fade-in {
-    form {
+    from {
       opacity: 0;
     }
     to {
@@ -47,7 +50,7 @@ const ToastWrapper = styled.div`
   }
 
   @keyframes fade-out {
-    form {
+    from {
       opacity: 1;
     }
     to {
