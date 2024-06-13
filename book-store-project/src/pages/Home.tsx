@@ -1,12 +1,22 @@
 import Title from '@/components/common/Title';
+import MainReview from '@/components/main/MainReview';
+import { useMain } from '@/hooks/useMain';
 import styled from 'styled-components';
 
 const Home = () => {
+  const { reviews } = useMain();
+
   return (
     <HomeStyle>
-      <Title size='large' color='primary'>
-        Home
-      </Title>
+      {/* 배너 */}
+
+      {/* 베스트 셀러 */}
+
+      {/* 신간 */}
+
+      {/* 리뷰 */}
+      <MainReview reviews={reviews} />
+
     </HomeStyle>
   )
 };
