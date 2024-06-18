@@ -23,7 +23,7 @@ export const useIntersectionObserver = (callback: Callback, options?: ObserverOp
         observer.unobserve(targetRef.current);
       }
     }
-  }, []);
+  }, [callback, options]);
 
   return targetRef;
 };

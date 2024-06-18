@@ -18,7 +18,6 @@ const Star = (props: Pick<IBookReviewItem, 'score'>) => {
 }
 
 const BookReviewItem = ({ review }: Props) => {
-  console.log(review);
   return (
     <BookReviewItemWrapper>
       <header className="header">

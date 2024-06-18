@@ -37,7 +37,7 @@ const BookItem = ({ book, view }: Props) => {
   )
 };
 
-const BookItemWrapper = styled.div<Pick<Props, 'view'>>`
+export const BookItemWrapper = styled.div<Pick<Props, 'view'>>`
   a {
     display: flex;
     flex-direction: ${({ view }) => view === 'grid' ? 'column' : 'row'};
