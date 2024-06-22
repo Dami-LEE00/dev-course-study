@@ -64,4 +64,5 @@ export const requestHandler = async <T>(
     default:
       throw new Error(`Unsupported request method: ${method}`);
   }
+  return response.data;
 };
